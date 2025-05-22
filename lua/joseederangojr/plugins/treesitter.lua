@@ -16,6 +16,8 @@ return {
         "php",
         "javascript",
         "typescript",
+        "json",
+        "yaml",
       },
       auto_install = true,
       highlight = {

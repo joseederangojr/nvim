@@ -4,17 +4,18 @@ return {
     dependencies = {
       { "williamboman/mason.nvim", config = true },
       "williamboman/mason-lspconfig.nvim",
-      "WhoIsSethDaniel/mason-tool-installer.nvim",
-      opts = {
-        ensure_installed = {
-          "tailwindcss",
-          "ts_ls",
-          "intelephense",
-          "biome",
-          "emmet_language_server",
-          "yamlls",
-          "jsonls",
-          "lua_ls",
+      {
+        "WhoIsSethDaniel/mason-tool-installer.nvim",
+        opts = {
+          ensure_installed = {
+            "tailwindcss",
+            "intelephense",
+            "biome",
+            "emmet_language_server",
+            "yamlls",
+            "jsonls",
+            "lua_ls",
+          },
         },
       },
 
@@ -76,7 +77,6 @@ return {
       local servers = {
         html = {},
         tailwindcss = {},
-        ts_ls = {},
         intelephense = {},
         biome = {},
         emmet_language_server = {},
