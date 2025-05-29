@@ -2,7 +2,7 @@ return {
   {
     "neovim/nvim-lspconfig",
     dependencies = {
-      { "williamboman/mason.nvim", config = true },
+      { "williamboman/mason.nvim", config = {} },
       "williamboman/mason-lspconfig.nvim",
       {
         "WhoIsSethDaniel/mason-tool-installer.nvim",
@@ -20,8 +20,17 @@ return {
       },
 
       { "j-hui/fidget.nvim", opts = {} },
-      { "folke/neodev.nvim", opts = {} },
+      {
+        "folke/lazydev.nvim",
+        ft = "lua", -- only load on lua files
+        opts = {
+          library = {
+            { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+          },
+        },
+      },
       { "VonHeikemen/lsp-zero.nvim", branch = "v3.x" },
+      { "b0o/schemastore.nvim" },
     },
     config = function()
       vim.api.nvim_create_autocmd("LspAttach", {
@@ -71,6 +80,7 @@ return {
           end
         end,
       })
+
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
@@ -80,13 +90,41 @@ return {
         intelephense = {},
         biome = {},
         emmet_language_server = {},
-        yamlls = {},
-        jsonls = {},
+        yamlls = {
+          settings = {
+            yaml = {
+              format = {
+                enable = true,
+              },
+              completion = true,
+              validate = true,
+              schemaStore = {
+                enable = false,
+              },
+              schemas = require("schemastore").yaml.schemas(),
+            },
+          },
+        },
+        jsonls = {
+          settings = {
+            json = {
+              format = {
+                enable = true,
+              },
+              validate = { enable = true },
+              schemas = require("schemastore").json.schemas(),
+            },
+          },
+        },
         lua_ls = {
           settings = {
             Lua = {
               runtime = {
                 version = "LuaJIT",
+                path = {
+                  "lua/?.lua",
+                  "lua/?/init.lua",
+                },
               },
               diagnostics = {
                 globals = {
@@ -95,7 +133,11 @@ return {
                 },
               },
               workspace = {
-                library = vim.api.nvim_get_runtime_file("", true),
+                checkThirdParty = false,
+                library = {
+                  vim.api.nvim_get_runtime_file("", true),
+                  vim.env.VIMRUNTIME,
+                },
               },
               telemetry = {
                 enable = false,
@@ -106,37 +148,16 @@ return {
       }
 
       require("mason-lspconfig").setup({
+        automatic_enable = {
+          exclude = {},
+        },
         ensure_installed = {},
-        automatic_enable = {},
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
             server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
             require("lspconfig")[server_name].setup(server)
           end,
-        },
-        yamlls = function()
-          vim.lsp.on_attach(function(_, buffer)
-            if vim.bo[buffer].filetype == "helm" then
-              vim.schedule(function()
-                vim.cmd("LspStop ++force yamlls")
-              end)
-            end
-          end, "yamlls")
-        end,
-        jsonls = {
-          on_new_config = function(new_config)
-            new_config.settings.json.schemas = new_config.settings.json.schemas or {}
-            vim.list_extend(new_config.settings.json.schemas, require("schemastore").json.schemas())
-          end,
-          settings = {
-            json = {
-              format = {
-                enable = true,
-              },
-              validate = { enable = true },
-            },
-          },
         },
       })
     end,

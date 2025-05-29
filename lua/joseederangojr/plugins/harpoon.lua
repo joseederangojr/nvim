@@ -11,9 +11,9 @@ return {
         settings = { save_on_toggle = true, sync_on_ui_close = true },
       })
 
-      vim.keymap.set("n", "<leader>a", function()
+      vim.keymap.set("n", "<leader>ha", function()
         harpoon:list():add()
-      end, { desc = "Harpoon [A]dd Buffer" })
+      end, { desc = "[H]arpoon [A]dd Buffer" })
       vim.keymap.set("n", "<C-e>", function()
         harpoon.ui:toggle_quick_menu(harpoon:list())
       end)

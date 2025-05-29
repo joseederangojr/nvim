@@ -14,7 +14,7 @@ return {
             "yq",
             "sqruff",
             "pint",
-            'stylua'
+            "stylua",
           },
         },
       },
@@ -35,6 +35,7 @@ return {
         typescriptreact = { "biome", "prettierd", stop_after_first = true },
         typescriptreact = { "biome", "prettierd", stop_after_first = true },
         json = { "jq" },
+        jsonc = { "jq" },
         html = { "prettierd" },
         bash = { "shfmt" },
         yaml = { "prettierd" },
@@ -43,16 +44,16 @@ return {
         scss = { "prettierd", stop_after_first = true },
         php = { "prettierd", "pint" },
         sql = { "sqruff" },
-        lua = {'stylua'}
+        lua = { "stylua" },
       },
       --@type table<string, conform.FormatterConfigOverride|fun(bufnr: integer)
       formatters = {},
     },
     config = function(_, opts)
-      require('conform').setup(opts)
-      vim.keymap.set({'v', 'n', 'i'}, '<leader>bf', function()
-          require("conform").format({ async = true, lsp_fallback = true })
-        end, { desc = '[B]uffer [F]ormat'})
-    end
+      require("conform").setup(opts)
+      vim.keymap.set({ "v", "n", "i" }, "<leader>bf", function()
+        require("conform").format({ async = true, lsp_fallback = true })
+      end, { desc = "[B]uffer [F]ormat" })
+    end,
   },
 }

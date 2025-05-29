@@ -9,7 +9,17 @@ return {
     end,
     config = function()
       local dbee = require("dbee")
-      dbee.setup({})
+      dbee.setup({
+        editor = {
+          -- mappings for the buffer
+          mappings = {
+            -- run what's currently selected on the active connection
+            { key = "<CR>", mode = "v", action = "run_selection" },
+            -- run the whole file on the active connection
+            { key = "<CR>", mode = "n", action = "run_file" },
+          },
+        },
+      })
     end,
   },
 

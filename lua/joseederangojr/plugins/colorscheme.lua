@@ -6,7 +6,6 @@ return {
     priority = 1000,
     init = function()
       require("catppuccin").setup({
-        no_italic = true,
         flavour = "mocha",
         transparent_background = true,
         integrations = {

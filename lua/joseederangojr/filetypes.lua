@@ -8,7 +8,7 @@ vim.filetype.add({
   filename = {
     [".env"] = "sh",
     ["env"] = "sh",
-    ["tsconfig.json"] = "jsonc",
+    ["bun.lock"] = "json",
   },
   pattern = {
     ["%.env%.[%w_.-]+"] = "sh",
